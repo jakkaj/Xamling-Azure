@@ -26,7 +26,10 @@
 	   <dependency id="StackExchange.Redis" version="1.0.450" />      
 	   <dependency id="WindowsAzure.ServiceBus" version="2.7.3" />      
 	   <dependency id="WindowsAzure.Storage" version="4.3.0" />      
-	   <dependency id="XamlingCore" version="2.0.141" />      
+	   <dependency id="XamlingCore" version="2.0.141" />  
+	   <dependency id="Microsoft.Azure.DocumentDB" version="1.2.0" />  
+	   
+	   
     </dependencies>
   </metadata>
 </package>
