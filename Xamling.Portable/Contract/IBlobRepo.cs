@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using XamlingCore.Portable.Model.Response;
 
-namespace Xamling.Portable.Contract
+namespace Xamling.Azure.Portable.Contract
 {
     public interface IBlobRepo
     {

@@ -1,4 +1,4 @@
-﻿namespace Xamling.Portable.Entity
+﻿namespace Xamling.Azure.Portable.Entity
 {
     public enum XSeverityLevel
     {

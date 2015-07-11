@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage.Table;
 using Microsoft.WindowsAzure.Storage.Table.Queryable;
 using Xamling.Azure.Contract;
-using Xamling.Portable.Contract;
+using Xamling.Azure.Portable.Contract;
 using XamlingCore.Portable.Model.Response;
 
 namespace Xamling.Azure.Table

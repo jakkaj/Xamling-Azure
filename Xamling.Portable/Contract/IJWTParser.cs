@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Xamling.Portable.Contract
+namespace Xamling.Azure.Portable.Contract
 {
     public interface IJwtParser
     {

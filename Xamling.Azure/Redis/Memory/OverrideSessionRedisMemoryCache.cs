@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xamling.Portable.Contract;
-using Xamling.Portable.Contract.Cache;
+using Xamling.Azure.Portable.Contract.Cache;
 
 namespace Xamling.Azure.Redis.Memory
 {

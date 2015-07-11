@@ -1,5 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Storage.Blob;
-using Xamling.Portable.Contract;
+using Xamling.Azure.Portable.Contract;
 
 namespace Xamling.Azure.Blob
 {

@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Xamling.Portable.Entity;
+using Xamling.Azure.Portable.Entity;
 using XamlingCore.Portable.Model.Response;
 
-namespace Xamling.Portable.Contract
+namespace Xamling.Azure.Portable.Contract
 {
     public interface ILogService
     {

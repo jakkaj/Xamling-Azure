@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamling.Portable", "Xamling.Portable\Xamling.Portable.csproj", "{D849B243-19FF-4EE3-B0FE-1B625459DAE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamling.Azure.Portable", "Xamling.Portable\Xamling.Azure.Portable.csproj", "{D849B243-19FF-4EE3-B0FE-1B625459DAE1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamling.Azure", "Xamling.Azure\Xamling.Azure.csproj", "{13C086AB-5E2A-4BE1-A012-F2FD95C4DA90}"
 EndProject

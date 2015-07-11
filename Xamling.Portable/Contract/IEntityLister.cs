@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using XamlingCore.Portable.Model.Contract;
 
-namespace Xamling.Portable.Contract
+namespace Xamling.Azure.Portable.Contract
 {
     public interface IEntityLister<T> where T : IEntity
     {

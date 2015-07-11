@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Xamling.Portable.Entity
+﻿namespace Xamling.Azure.Portable.Entity
 {
     public class QueueMessageWrapper<T>
         where T : class, new()

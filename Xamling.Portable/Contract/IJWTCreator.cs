@@ -1,7 +1,7 @@
 ﻿using System;
-using Xamling.Portable.Entity;
+using Xamling.Azure.Portable.Entity;
 
-namespace Xamling.Portable.Contract
+namespace Xamling.Azure.Portable.Contract
 {
     public interface IJwtCreator
     {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Xamling.Portable.Contract;
-using Xamling.Portable.Contract.Cache;
+using Xamling.Azure.Portable.Contract.Cache;
 using XamlingCore.Portable.Contract.Entities;
 using XamlingCore.Portable.Model.Cache;
 

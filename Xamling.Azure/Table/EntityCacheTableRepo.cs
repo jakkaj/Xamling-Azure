@@ -1,7 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using Xamling.Azure.Contract;
 using Xamling.Azure.Entities;
-using Xamling.Portable.Contract;
+using Xamling.Azure.Portable.Contract;
 
 namespace Xamling.Azure.Table
 {

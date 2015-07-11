@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Xamling.Portable.Contract;
-using Xamling.Portable.Contract.Cache;
+using Xamling.Azure.Portable.Contract;
+using Xamling.Azure.Portable.Contract.Cache;
 using XamlingCore.Portable.Contract.Entities;
 using XamlingCore.Portable.Model.Contract;
 

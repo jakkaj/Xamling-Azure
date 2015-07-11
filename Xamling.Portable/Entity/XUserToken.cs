@@ -1,7 +1,7 @@
 ﻿using System;
 using XamlingCore.Portable.Model.Contract;
 
-namespace Xamling.Portable.Entity
+namespace Xamling.Azure.Portable.Entity
 {
     public class XUserToken : IEntity
     {

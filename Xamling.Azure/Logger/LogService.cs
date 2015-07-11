@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
-using Xamling.Portable.Contract;
-using Xamling.Portable.Entity;
+using Xamling.Azure.Portable.Contract;
+using Xamling.Azure.Portable.Entity;
 using XamlingCore.Portable.Contract.Serialise;
 using XamlingCore.Portable.Model.Response;
 

@@ -1,4 +1,4 @@
-﻿using Xamling.Portable.Contract;
+﻿using Xamling.Azure.Portable.Contract;
 
 namespace Xamling.Azure.Contract
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Xamling.Portable.Contract.Cache
+namespace Xamling.Azure.Portable.Contract.Cache
 {
     public interface IOverrideSessionRedisEntityCache : IRedisEntityCache
     {

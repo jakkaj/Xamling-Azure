@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using StackExchange.Redis;
-using Xamling.Portable.Contract.Cache;
+using Xamling.Azure.Portable.Contract.Cache;
 using XamlingCore.Portable.Contract.Serialise;
 using XamlingCore.Portable.Data.Entities;
 using XamlingCore.Portable.Model.Resiliency;

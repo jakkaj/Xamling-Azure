@@ -7,8 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using StackExchange.Redis;
 using Xamling.Azure.Contract;
-using Xamling.Portable.Contract;
-using Xamling.Portable.Entity;
+using Xamling.Azure.Portable.Contract;
+using Xamling.Azure.Portable.Entity;
 using XamlingCore.Portable.Contract.Config;
 
 namespace Xamling.Azure.Redis
