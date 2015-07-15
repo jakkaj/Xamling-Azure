@@ -11,5 +11,7 @@ namespace Xamling.Azure.Entities
     {
         public string Key { get; set; }
         public string PersonName {get; set; }
+        public TestKeyEntity SubKey { get; set; }
+
     }
 }

@@ -21,10 +21,9 @@ namespace Xamling.Azure.IntegrationTests.Tests
         [TestMethod]
         public async Task CreateTestDocument()
         {
-            //var d = new DocumentClient(new Uri("https://ptdb.documents.azure.com:443/"),
-            //    "Epn2VV6081ypHRc6B+tgHK3fBpVmiP19KeVqi3lxHWnWQMLvA/gFYAJpc+nyZj3LSOn8S+VoZSMpEWwGoFsHpw==");
+            
 
-            ////var db = Resolve<IDocumentConnection>();
+            var db = Resolve<IDocumentConnection>();
 
             //var db = d.CreateDatabaseQuery()
             //            .Where(d2 => d2.Id == "TestDatabase")
@@ -37,15 +36,31 @@ namespace Xamling.Azure.IntegrationTests.Tests
             var c = Resolve<IDocumentEntityCache>();
 
             var doc = new TestKeyEntity();
+
             doc.PersonName = "Jordan Kniht";
+
+            doc.SubKey = new TestKeyEntity
+            {
+                Key = "Subkey item"
+            };
 
             var result = await c.SetEntity("SOme key!", doc);
 
             Assert.IsTrue(result);
 
             var getRes = await c.GetEntity<TestKeyEntity>("SOme key!");
-
             Assert.IsNotNull(getRes);
+            var collection = await db.GetCollection();
+
+            var q = db.Client.CreateDocumentQuery<TestKeyEntity>(collection.DocumentsLink)
+                .Where(d => d.SubKey.Key == "Subkey item").ToList();
+
+
+            var i = q.FirstOrDefault();
+
+            Assert.IsNotNull(i);
+
+           
 
         }
     }
