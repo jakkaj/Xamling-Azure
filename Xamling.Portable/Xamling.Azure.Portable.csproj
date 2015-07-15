@@ -52,9 +52,11 @@
     <Compile Include="Contract\Cache\ISharedMemoryCache.cs" />
     <Compile Include="Contract\IBlobRepo.cs" />
     <Compile Include="Contract\IBlobRepoFactory.cs" />
+    <Compile Include="Contract\Cache\IDocumentEntityCache.cs" />
     <Compile Include="Contract\IEntityLister.cs" />
     <Compile Include="Contract\IJWTCreator.cs" />
     <Compile Include="Contract\IJWTParser.cs" />
+    <Compile Include="Contract\IKeyEntity.cs" />
     <Compile Include="Contract\ILogService.cs" />
     <Compile Include="Contract\Cache\IOverrideSessionEntityCache.cs" />
     <Compile Include="Contract\Cache\IOverrideSessionRedisEntityCache.cs" />

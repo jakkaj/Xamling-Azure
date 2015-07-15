@@ -198,7 +198,11 @@
     <Compile Include="Contract\IEntityCacheBlobRepo.cs" />
     <Compile Include="Contract\IEntityCacheTableRepo.cs" />
     <Compile Include="Contract\ITableRepo.cs" />
+    <Compile Include="DocumentDB\DocumentConnection.cs" />
+    <Compile Include="Contract\IDocumentConnection.cs" />
+    <Compile Include="DocumentDB\DocumentEntityCache.cs" />
     <Compile Include="Entities\EntityCacheTableEntity.cs" />
+    <Compile Include="Entities\TestKeyEntity.cs" />
     <Compile Include="EntityCaches\SharedEntityCache.cs" />
     <Compile Include="EntityList\EntityList.cs" />
     <Compile Include="EntityList\EntityLister.cs" />

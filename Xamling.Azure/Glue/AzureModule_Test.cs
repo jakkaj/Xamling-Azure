@@ -1,8 +1,12 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
+using Microsoft.Azure.Documents;
+using Microsoft.Azure.Documents.Client;
 using Microsoft.WindowsAzure.Storage;
 using StackExchange.Redis;
 using Xamling.Azure.Blob;
 using Xamling.Azure.Contract;
+using Xamling.Azure.DocumentDB;
 using Xamling.Azure.EntityCaches;
 using Xamling.Azure.EntityList;
 using Xamling.Azure.Logger;
@@ -23,6 +27,13 @@ namespace Xamling.Azure.Glue
     {
         protected override void Load(ContainerBuilder builder)
         {
+
+            builder.Register(_ => new DocumentClient(new Uri(_.Resolve<IConfig>()["DocumentDatabaseUri"]), _.Resolve<IConfig>()["DocumentDatabaseAuth"]));
+
+            builder.RegisterType<DocumentConnection>().As<IDocumentConnection>().SingleInstance();
+
+            builder.RegisterType<DocumentEntityCache>().As<IDocumentEntityCache>();
+
             builder.Register(_ => CloudStorageAccount.Parse(_.Resolve<IConfig>()["StorageConnectionString"]))
                 .AsSelf()
                 .SingleInstance();
@@ -38,6 +49,8 @@ namespace Xamling.Azure.Glue
             builder.Register(_ => _.Resolve<CloudStorageAccount>().CreateCloudQueueClient())
                 .AsSelf()
                 .SingleInstance();
+
+
 
             builder.RegisterGeneric(typeof (QueueMessageRepo<>)).As(typeof (IQueueMessageRepo<>)).SingleInstance();
 
