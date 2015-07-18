@@ -54,6 +54,7 @@
     <Compile Include="Contract\IBlobRepoFactory.cs" />
     <Compile Include="Contract\Cache\IDocumentEntityCache.cs" />
     <Compile Include="Contract\IDocumentEntity.cs" />
+    <Compile Include="Contract\IDocumentRepo.cs" />
     <Compile Include="Contract\IEntityLister.cs" />
     <Compile Include="Contract\IJWTCreator.cs" />
     <Compile Include="Contract\IJWTParser.cs" />

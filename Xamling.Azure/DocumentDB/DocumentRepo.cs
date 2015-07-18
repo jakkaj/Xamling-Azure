@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
@@ -17,7 +18,7 @@ using XamlingCore.Portable.Model.Response;
 
 namespace Xamling.Azure.DocumentDB
 {
-    public class DocumentRepo<T> where T : class, IDocumentEntity, new()
+    public class DocumentRepo<T> : IDocumentRepo<T> where T : class, IDocumentEntity, new()
     {
         private readonly IDocumentConnection _documentConnection;
         private readonly ILogService _logService;
@@ -53,9 +54,15 @@ namespace Xamling.Azure.DocumentDB
 
         public async Task<XResult<IList<T>>> GetList(string key, bool allowExpired = false)
         {
+            return await GetList(_ => _.id == key, allowExpired);
+        }
+
+        public async Task<XResult<IList<T>>> GetList(Expression<Func<T, bool>> query , bool allowExpired = false)
+        {
             await _init();
+
             var q = _client.CreateDocumentQuery<T>(_collection.DocumentsLink)
-                .Where(d => d.Id == key);
+                .Where(query);
 
             var documents = await _queryAsync(q);
 
@@ -74,12 +81,12 @@ namespace Xamling.Azure.DocumentDB
             return new XResult<IList<T>>(listItems);
         }
 
-        public async Task<XResult<T>> AddOrUpdate(string key, T entity, TimeSpan? maxAge = null)
+        public async Task<XResult<T>> AddOrUpdate(T entity, TimeSpan? maxAge = null)
         {
             await _init();
 
             var q = _client.CreateDocumentQuery<Document>(_collection.DocumentsLink)
-                .Where(d => d.Id == key);
+                .Where(d => d.Id == entity.id);
 
             dynamic getExistingDocumentResult = q.AsEnumerable().FirstOrDefault();
 
@@ -205,7 +212,7 @@ namespace Xamling.Azure.DocumentDB
             {
                 var result = await func();
 
-                if (result.StatusCode != HttpStatusCode.OK && result.StatusCode != HttpStatusCode.NoContent)
+                if (result.StatusCode != HttpStatusCode.OK && result.StatusCode != HttpStatusCode.Created)
                 {
                     return
                         XResult<T>.GetBadRequest($"Document Database not OK result: {(int)result.StatusCode}");

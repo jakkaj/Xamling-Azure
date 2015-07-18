@@ -33,6 +33,7 @@ namespace Xamling.Azure.Glue
             builder.RegisterType<DocumentConnection>().As<IDocumentConnection>().SingleInstance();
 
             builder.RegisterType<DocumentEntityCache>().As<IDocumentEntityCache>();
+            builder.RegisterGeneric(typeof(DocumentRepo<>)).As(typeof(IDocumentRepo<>)).SingleInstance();
 
             builder.Register(_ => CloudStorageAccount.Parse(_.Resolve<IConfig>()["StorageConnectionString"]))
                 .AsSelf()
