@@ -40,9 +40,9 @@ namespace Xamling.Azure.DocumentDB
             }
         }
 
-        public async Task<XResult<T>> Get(string key, bool allowExpired = false)
+        public async Task<XResult<T>> Get(string key)
         {
-            var listItems = await GetList(key, allowExpired);
+            var listItems = await GetList(key);
 
             if (!listItems)
             {
@@ -52,12 +52,12 @@ namespace Xamling.Azure.DocumentDB
             return new XResult<T>(listItems.Object.FirstOrDefault());
         }
 
-        public async Task<XResult<IList<T>>> GetList(string key, bool allowExpired = false)
+        public async Task<XResult<IList<T>>> GetList(string key)
         {
-            return await GetList(_ => _.Id == key, allowExpired);
+            return await GetList(_ => _.Id == key);
         }
 
-        public async Task<XResult<IList<T>>> GetList(Expression<Func<T, bool>> query , bool allowExpired = false)
+        public async Task<XResult<IList<T>>> GetList(Expression<Func<T, bool>> query)
         {
             await _init();
 

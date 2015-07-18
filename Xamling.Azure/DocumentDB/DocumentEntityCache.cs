@@ -3,121 +3,35 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 using StackExchange.Redis;
 using Xamling.Azure.Portable.Contract;
 using Xamling.Azure.Portable.Contract.Cache;
+using Xamling.Azure.Portable.Entity;
 using XamlingCore.Portable.Contract.Serialise;
+using XamlingCore.Portable.Model.Cache;
 
 namespace Xamling.Azure.DocumentDB
 {
     public class DocumentEntityCache : IDocumentEntityCache
+       
     {
-       
-        private readonly IDocumentConnection _documentConnection;
-       
-        private readonly IEntitySerialiser _entitySerialiser;
+        private readonly ILifetimeScope _scope;
 
         private DocumentCollection _collection;
        
         private DocumentClient _client;
 
-        public DocumentEntityCache(IDocumentConnection documentConnection, IEntitySerialiser serialiser)
+        public DocumentEntityCache(ILifetimeScope scope)
         {
-            _documentConnection = documentConnection;
-           
-            _entitySerialiser = serialiser;
+            _scope = scope;
         }
-
-        async Task  _init()
-        {
-            _collection = await _documentConnection.GetCollection();
-            _client = _documentConnection.Client;
-        }
-
-        private async Task<Document> _createDocument<T>(T doc) where T : IKeyEntity
-        {
-            await _init();
-            return await _client.CreateDocumentAsync(_collection.SelfLink, doc);
-        }
-
-        private async Task<IEnumerable<T>> _getDocuments<T>(string key) where T : IKeyEntity
-        {
-            await _init();
-            var q = _client.CreateDocumentQuery<T>(_collection.DocumentsLink)
-                .Where(d => d.Key == key);
-
-            var documents = await _queryAsync(q);
-
-            return documents;
-        }
-
-        private async Task<IEnumerable<T>> _queryAsync<T>(IQueryable<T> query)
-        {
-            var docQuery = query.AsDocumentQuery();
-            var batches = new List<IEnumerable<T>>();
-
-            do
-            {
-                var batch = await docQuery.ExecuteNextAsync<T>();
-
-                batches.Add(batch);
-            }
-            while (docQuery.HasMoreResults);
-
-            var docs = batches.SelectMany(b => b);
-
-            return docs;
-        }
-
-
-        string _getFullKey<T>(string key)
-        {
-            var path = String.Join(":", _getDirPath<T>(), string.Format("{0}.cache", key));
-            return path;
-        }
-
-        string _getDirPath<T>()
-        {
-            var p = string.Format("cache_{0}", _getTypePath<T>());
-            p = string.Join(":", "cache", p);
-
-            return p;
-        }
-
-        string _getTypePath<T>()
-        {
-            var t = typeof(T);
-            var args = t.GenericTypeArguments;
-
-            string tName = t.Name;
-
-            if (args != null)
-            {
-                foreach (var a in args)
-                {
-                    tName += "_" + a.Name;
-                    if (a.GenericTypeArguments != null)
-                    {
-                        foreach (var subA in a.GenericTypeArguments)
-                        {
-                            tName += "_" + subA.Name;
-                        }
-                    }
-                }
-            }
-
-            tName = tName.Replace("`", "-g-");
-
-            return tName;
-        }
-
-
 
         public async Task<T> GetEntity<T>(string key, Func<Task<T>> sourceTask, TimeSpan? maxAge = null,
-            bool allowExpired = true, bool allowZeroList = true) where T : class,IKeyEntity, new()
+            bool allowExpired = true, bool allowZeroList = true) where T: class, new()
         {
             var e = await GetEntity<T>(key);
 
@@ -141,18 +55,23 @@ namespace Xamling.Azure.DocumentDB
             return result;
         }
 
-        public async Task<T> GetCacheItem<T>(string key, TimeSpan? maxAge = null) where T : class, IKeyEntity, new()
+        private IDocumentRepo<XDocumentCacheItem<T>>_getRepo<T>() where T :class, new()
+        {
+            return _scope.Resolve<IDocumentRepo<XDocumentCacheItem<T>>>();
+        }
+
+        public async Task<T> GetCacheItem<T>(string key, TimeSpan? maxAge = null) where T : class, new()
         {
             var fullName = _getFullKey<T>(key);
 
-            var items = await _getDocuments<T>(fullName);
+            var item = await _getRepo<T>().Get(fullName); 
 
-            if (items == null)
+            if (!item)
             {
                 return null;
             }
 
-            return items.FirstOrDefault();
+            return item.Object.Item;
         }
 
         //public async Task<List<T>> GetEntityList<T>(string key, bool clear = false) where T : class, new()
@@ -243,34 +162,31 @@ namespace Xamling.Azure.DocumentDB
         //}
 
 
-        public async Task<T> GetEntity<T>(string key) where T : class, IKeyEntity, new()
+        public async Task<T> GetEntity<T>(string key) where T : class, new()
         {
             var f = await GetCacheItem<T>(key);
             return f;
         }
 
-        public async Task<bool> SetEntity<T>(string key, T item) where T : class, IKeyEntity, new()
+        public async Task<bool> SetEntity<T>(string key, T item) where T : class, new()
         {
             return await SetEntity(key, item, null);
         }
 
-        public async Task<bool> SetEntity<T>(string key, T item, TimeSpan? maxAge) where T : class, IKeyEntity, new()
+        public async Task<bool> SetEntity<T>(string key, T item, TimeSpan? maxAge) where T : class, new()
         {
             var fullName = _getFullKey<T>(key);
-            item.Key = fullName;
 
-            var result = await _createDocument(item);
+            var i = new XDocumentCacheItem<T>();
+            i.Item = item;
+            i.Id = fullName;
+            
+            i.DateStamp = DateTime.UtcNow;
+            i.MaxAge = maxAge;
+
+            var result = await _getRepo<T>().AddOrUpdate(i);
 
             return result != null;
-
-            //var serialised = Serialise(item);
-
-            //if (maxAge == null)
-            //{
-            //    maxAge = TimeSpan.FromDays(7);
-            //}
-
-            //return await XResiliant.Default.RunBool(() => _database.StringSetAsync(fullName, serialised, maxAge));
         }
 
         //public async Task<bool> SetEntityList<T>(string key, T item, TimeSpan? maxAge = null) where T : class, new()
@@ -391,65 +307,48 @@ namespace Xamling.Azure.DocumentDB
         //    var fullName = _getFullKey<T>(key);
         //    return await _database.KeyDeleteAsync(fullName);
         //}
-
-        //public async Task DisableMemoryCache()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public async Task EnableMemoryCache()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<List<T>> GetAll<T>() where T : class, new()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task DeleteAll<T>() where T : class, new()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public async Task<TimeSpan?> GetAge<T>(string key) where T : class, new()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<bool> ValidateAge<T>(string key) where T : class, new()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-
-
-        protected T Deserialise<T>(string entity)
-            where T : class
+        
+        string _getFullKey<T>(string key)
         {
-            if (string.IsNullOrWhiteSpace(entity))
-            {
-                return null;
-            }
-
-            try
-            {
-
-                var e = _entitySerialiser.Deserialise<T>(entity);
-                return e;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Des problem: " + ex.Message);
-            }
-
-            return null;
+            var path = String.Join(":", _getDirPath<T>(), string.Format("{0}.cache", key));
+            return path;
         }
 
-        protected string Serialise<T>(T entity)
+        string _getDirPath<T>()
         {
-            return _entitySerialiser.Serialise(entity);
+            var p = string.Format("cache_{0}", _getTypePath<T>());
+            p = string.Join(":", "cache", p);
+
+            return p;
         }
+
+        string _getTypePath<T>()
+        {
+            var t = typeof(T);
+            var args = t.GenericTypeArguments;
+
+            string tName = t.Name;
+
+            if (args != null)
+            {
+                foreach (var a in args)
+                {
+                    tName += "_" + a.Name;
+                    if (a.GenericTypeArguments != null)
+                    {
+                        foreach (var subA in a.GenericTypeArguments)
+                        {
+                            tName += "_" + subA.Name;
+                        }
+                    }
+                }
+            }
+
+            tName = tName.Replace("`", "-g-");
+
+            return tName;
+        }
+
 
     }
 }
