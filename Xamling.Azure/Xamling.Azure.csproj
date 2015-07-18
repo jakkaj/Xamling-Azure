@@ -201,6 +201,7 @@
     <Compile Include="DocumentDB\DocumentConnection.cs" />
     <Compile Include="Contract\IDocumentConnection.cs" />
     <Compile Include="DocumentDB\DocumentEntityCache.cs" />
+    <Compile Include="DocumentDB\DocumentRepo.cs" />
     <Compile Include="Entities\EntityCacheTableEntity.cs" />
     <Compile Include="Entities\TestKeyEntity.cs" />
     <Compile Include="EntityCaches\SharedEntityCache.cs" />
