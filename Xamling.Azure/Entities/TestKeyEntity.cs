@@ -14,7 +14,7 @@ namespace Xamling.Azure.Entities
         public string PersonName {get; set; }
         public TestKeyEntity SubKey { get; set; }
 
-        //[JsonProperty(PropertyName = "id")]
-        public string id { get; set; }
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
     }
 }

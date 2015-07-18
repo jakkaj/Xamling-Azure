@@ -54,7 +54,7 @@ namespace Xamling.Azure.DocumentDB
 
         public async Task<XResult<IList<T>>> GetList(string key, bool allowExpired = false)
         {
-            return await GetList(_ => _.id == key, allowExpired);
+            return await GetList(_ => _.Id == key, allowExpired);
         }
 
         public async Task<XResult<IList<T>>> GetList(Expression<Func<T, bool>> query , bool allowExpired = false)
@@ -86,7 +86,7 @@ namespace Xamling.Azure.DocumentDB
             await _init();
 
             var q = _client.CreateDocumentQuery<Document>(_collection.DocumentsLink)
-                .Where(d => d.Id == entity.id);
+                .Where(d => d.Id == entity.Id);
 
             dynamic getExistingDocumentResult = q.AsEnumerable().FirstOrDefault();
 

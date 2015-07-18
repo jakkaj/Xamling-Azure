@@ -9,7 +9,7 @@ namespace Xamling.Azure.Portable.Contract
 {
     public interface IDocumentEntity
     {
-        //[JsonProperty(PropertyName = "id")]
-        string id { get; set; }
+        [JsonProperty(PropertyName = "id")]
+        string Id { get; set; }
     }
 }

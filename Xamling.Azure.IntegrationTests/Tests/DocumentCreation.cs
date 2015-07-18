@@ -25,7 +25,11 @@ namespace Xamling.Azure.IntegrationTests.Tests
             var i = Resolve<IDocumentRepo<TestKeyEntity>>();
 
             var t = new TestKeyEntity();
-            t.id = "JordanKey2";
+            t.Id = "JordanKey2";
+            t.SubKey = new TestKeyEntity
+            {
+                PersonName = "Knight"
+            };
 
             t.PersonName = "Jordan3";
 
@@ -37,7 +41,7 @@ namespace Xamling.Azure.IntegrationTests.Tests
 
             Assert.IsTrue(result1);
 
-            var results = await i.GetList(_=>_.id == "JordanKey" || _.id == "JordanKey2");
+            var results = await i.GetList(_=>_.SubKey.PersonName == "Knight");
 
             Assert.IsTrue(results);
 
