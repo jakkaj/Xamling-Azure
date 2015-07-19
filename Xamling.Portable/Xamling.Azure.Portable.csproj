@@ -69,7 +69,6 @@
     <Compile Include="Entity\QueueMessageWrapper.cs" />
     <Compile Include="Entity\XDocumentCacheItem.cs" />
     <Compile Include="Entity\XUserToken.cs" />
-    <Compile Include="Entity\XServerityLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

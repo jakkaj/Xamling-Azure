@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Xamling.Azure.Portable.Contract;
 using Xamling.Azure.Portable.Entity;
+using XamlingCore.Portable.Model.Other;
 using XamlingCore.Portable.Model.Resiliency;
 using XamlingCore.Portable.Model.Response;
 

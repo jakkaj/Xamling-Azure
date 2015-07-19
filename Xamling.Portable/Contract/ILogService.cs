@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Xamling.Azure.Portable.Entity;
+using XamlingCore.Portable.Model.Other;
 using XamlingCore.Portable.Model.Response;
 
 namespace Xamling.Azure.Portable.Contract

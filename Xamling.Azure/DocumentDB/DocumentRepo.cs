@@ -212,7 +212,7 @@ namespace Xamling.Azure.DocumentDB
             {
                 var result = await func();
 
-                if (result.StatusCode != HttpStatusCode.OK && result.StatusCode != HttpStatusCode.Created)
+                if (result.StatusCode != HttpStatusCode.OK && result.StatusCode != HttpStatusCode.Created && result.StatusCode != HttpStatusCode.NoContent)
                 {
                     return
                         XResult<T>.GetBadRequest($"Document Database not OK result: {(int)result.StatusCode}");

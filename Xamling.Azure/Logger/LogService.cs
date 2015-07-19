@@ -9,6 +9,7 @@ using Microsoft.ApplicationInsights.DataContracts;
 using Xamling.Azure.Portable.Contract;
 using Xamling.Azure.Portable.Entity;
 using XamlingCore.Portable.Contract.Serialise;
+using XamlingCore.Portable.Model.Other;
 using XamlingCore.Portable.Model.Response;
 
 namespace Xamling.Azure.Logger

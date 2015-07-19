@@ -10,6 +10,7 @@ using Xamling.Azure.Contract;
 using Xamling.Azure.Portable.Contract;
 using Xamling.Azure.Portable.Entity;
 using XamlingCore.Portable.Contract.Config;
+using XamlingCore.Portable.Model.Other;
 
 namespace Xamling.Azure.Redis
 {

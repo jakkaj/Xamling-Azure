@@ -50,14 +50,7 @@ namespace RZ.NET.Tests.Mocks
 
         }
 
-        public void TrackTrace(string message, Xamling.Azure.Portable.Entity.XSeverityLevel severityLevel)
-        {
-          
-        }
-
-        public void TrackTrace(string message, Xamling.Azure.Portable.Entity.XSeverityLevel severityLevel, IDictionary<string, string> properties)
-        {
-        }
+       
 
         public void TrackTrace(string message, XSeverityLevel severityLevel)
         {

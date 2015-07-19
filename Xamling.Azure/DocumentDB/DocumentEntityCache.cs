@@ -21,10 +21,6 @@ namespace Xamling.Azure.DocumentDB
     {
         private readonly ILifetimeScope _scope;
 
-        private DocumentCollection _collection;
-       
-        private DocumentClient _client;
-
         public DocumentEntityCache(ILifetimeScope scope)
         {
             _scope = scope;
@@ -66,7 +62,12 @@ namespace Xamling.Azure.DocumentDB
 
             var item = await _getRepo<T>().Get(fullName); 
 
-            if (!item)
+            if (!item || item.Object?.Item == null)
+            {
+                return null;
+            }
+
+            if (!_validateAge(item.Object, maxAge))
             {
                 return null;
             }
@@ -74,93 +75,24 @@ namespace Xamling.Azure.DocumentDB
             return item.Object.Item;
         }
 
-        //public async Task<List<T>> GetEntityList<T>(string key, bool clear = false) where T : class, new()
-        //{
-        //    if (!_database.Multiplexer.IsConnected)
-        //    {
-        //        return null;
-        //    }
+        bool _validateAge<T>(XDocumentCacheItem<T> item, TimeSpan? maxAge = null)
+            where T: class, new()
+        {
+            if (item.MaxAge == null && maxAge == null)
+            {
+                return true;
+            }
 
-        //    var fullName = _getFullKey<T>(key);
+            if (maxAge != null)
+            {
+                item.MaxAge = maxAge;
+            }
 
-        //    var tran = _database.CreateTransaction();
+            var dt = DateTime.UtcNow;
+            var dtWithMaxAge = item.DateStamp.Add(item.MaxAge.Value);
 
-        //    var dataFromRedisTask = tran.ListRangeAsync(fullName, 0, -1);
-
-        //    if (clear)
-        //    {
-        //        var delTask = tran.KeyDeleteAsync(fullName);
-        //    }
-
-
-        //    await tran.ExecuteAsync();
-
-        //    var dataFromRedis = await dataFromRedisTask;
-
-        //    if (dataFromRedis == null || dataFromRedis.Length == 0)
-        //    {
-        //        return null;
-        //    }
-
-        //    return dataFromRedis.Select(item => Deserialise<T>(item)).ToList();
-        //}
-
-        //public async Task<List<string>> GetEntityList(string key, bool clear = false)
-        //{
-        //    if (!_database.Multiplexer.IsConnected)
-        //    {
-        //        return null;
-        //    }
-
-        //    var fullName = _getFullKey<string>(key);
-
-        //    var tran = _database.CreateTransaction();
-
-        //    var dataFromRedisTask = tran.ListRangeAsync(fullName, 0, -1);
-
-        //    if (clear)
-        //    {
-        //        var delTask = tran.KeyDeleteAsync(fullName);
-        //    }
-
-        //    await tran.ExecuteAsync();
-
-        //    var dataFromRedis = await dataFromRedisTask;
-
-        //    if (dataFromRedis == null || dataFromRedis.Length == 0)
-        //    {
-        //        return null;
-        //    }
-
-        //    return dataFromRedis.Select(item => item.ToString()).ToList();
-        //}
-
-        //public async Task<string> GetEntityListRightPop(string key)
-        //{
-        //    if (!_database.Multiplexer.IsConnected)
-        //    {
-        //        return null;
-        //    }
-
-        //    var fullName = _getFullKey<string>(key);
-
-        //    var dataFromRedis = await _database.ListRightPopAsync(fullName);
-
-        //    return dataFromRedis;
-        //}
-
-        //public async Task<long> GetListLength(string key)
-        //{
-        //    if (!_database.Multiplexer.IsConnected)
-        //    {
-        //        return 0;
-        //    }
-
-        //    var fullName = _getFullKey<string>(key);
-        //    var dataFromRedis = await _database.ListLengthAsync(fullName);
-        //    return dataFromRedis;
-        //}
-
+            return dtWithMaxAge < dt;
+        }
 
         public async Task<T> GetEntity<T>(string key) where T : class, new()
         {
@@ -189,125 +121,48 @@ namespace Xamling.Azure.DocumentDB
             return result != null;
         }
 
-        //public async Task<bool> SetEntityList<T>(string key, T item, TimeSpan? maxAge = null) where T : class, new()
-        //{
-        //    if (!_database.Multiplexer.IsConnected)
-        //    {
-        //        return false;
-        //    }
 
-        //    var fullName = _getFullKey<T>(key);
+        public Task Clear()
+        {
+            throw new NotImplementedException();
+        }
 
-        //    var serialised = Serialise(item);
+        public async Task<bool> Delete<T>(string key) where T : class, new()
+        {
+            var fullName = _getFullKey<T>(key);
+            return  await _getRepo<T>().Delete(fullName);
+        }
 
-        //    if (maxAge == null)
-        //    {
-        //        maxAge = TimeSpan.FromDays(30);
-        //    }
+        public Task DisableMemoryCache()
+        {
+            throw new NotImplementedException();
+        }
 
-        //    var result = await XResiliant.Default.RunBool(
-        //        async () => await _database.ListLeftPushAsync(fullName, serialised) != -1);
+        public Task EnableMemoryCache()
+        {
+            throw new NotImplementedException();
+        }
 
-        //    if (!result)
-        //    {
-        //        return false;
-        //    }
+        public Task<List<T>> GetAll<T>() where T : class, new()
+        {
+            throw new NotImplementedException();
+        }
 
-        //    await XResiliant.Default.RunBool(async () =>
-        //    {
-        //        await _database.KeyExpireAsync(fullName, DateTime.UtcNow.Add(maxAge.Value));
-        //        return true;
-        //    });
+        public Task DeleteAll<T>() where T : class, new()
+        {
+            throw new NotImplementedException();
+        }
 
+        public Task<TimeSpan?> GetAge<T>(string key) where T : class, new()
+        {
+            throw new NotImplementedException();
+        }
 
-        //    return true;
-        //}
+        public Task<bool> ValidateAge<T>(string key) where T : class, new()
+        {
+            throw new NotImplementedException();
+        }
 
-        //public async Task<bool> SetEntityList(string key, string item, TimeSpan? maxAge = null)
-        //{
-        //    if (!_database.Multiplexer.IsConnected)
-        //    {
-        //        return false;
-        //    }
-
-        //    var fullName = _getFullKey<string>(key);
-
-        //    if (maxAge == null)
-        //    {
-        //        maxAge = TimeSpan.FromDays(30);
-        //    }
-
-        //    var result = await XResiliant.Default.RunBool(
-        //        async () => await _database.ListLeftPushAsync(fullName, item) != -1);
-
-        //    if (!result)
-        //    {
-        //        return false;
-        //    }
-
-        //    await XResiliant.Default.RunBool(async () =>
-        //    {
-        //        await _database.KeyExpireAsync(fullName, DateTime.UtcNow.Add(maxAge.Value));
-        //        return true;
-        //    });
-
-        //    return true;
-        //}
-
-        //public async Task<bool> DeleteItemFromList<T>(string key, T item) where T : class, new()
-        //{
-        //    if (!_database.Multiplexer.IsConnected)
-        //    {
-        //        return false;
-        //    }
-
-        //    var fullName = _getFullKey<T>(key);
-
-        //    var serialised = Serialise(item);
-
-        //    var result = await XResiliant.Default.RunBool(async () =>
-        //    {
-        //        await _database.ListRemoveAsync(fullName, serialised);
-        //        return true;
-        //    });
-
-        //    return true;
-        //}
-
-        //public async Task<bool> DeleteItemFromList(string key, string item)
-        //{
-        //    if (!_database.Multiplexer.IsConnected)
-        //    {
-        //        return false;
-        //    }
-
-        //    var fullName = _getFullKey<string>(key);
-
-        //    var result = await XResiliant.Default.RunBool(async () =>
-        //    {
-        //        await _database.ListRemoveAsync(fullName, item);
-        //        return true;
-        //    });
-
-        //    return true;
-        //}
-
-        //public Task Clear()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public async Task<bool> Delete<T>(string key) where T : class, new()
-        //{
-        //    if (!_database.Multiplexer.IsConnected)
-        //    {
-        //        return false;
-        //    }
-
-        //    var fullName = _getFullKey<T>(key);
-        //    return await _database.KeyDeleteAsync(fullName);
-        //}
-        
         string _getFullKey<T>(string key)
         {
             var path = String.Join(":", _getDirPath<T>(), string.Format("{0}.cache", key));

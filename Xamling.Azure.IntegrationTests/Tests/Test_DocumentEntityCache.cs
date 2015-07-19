@@ -19,7 +19,9 @@ namespace Xamling.Azure.IntegrationTests.Tests
             var c = Resolve<IDocumentEntityCache>();
 
             var t = new TestKeyEntity();
+
             t.Id = "JordanKey5";
+
             t.SubKey = new TestKeyEntity
             {
                 PersonName = "Knight"
@@ -27,16 +29,26 @@ namespace Xamling.Azure.IntegrationTests.Tests
 
             t.PersonName = "Jordan3";
 
-            var result = await c.SetEntity("Jordan test key2", t);
+            var k = Guid.NewGuid().ToString();
+
+            var result = await c.SetEntity(k, t);
 
             Assert.IsTrue(result);
 
 
-            var resultGet = await c.GetEntity<TestKeyEntity>("Jordan test key2");
+            var resultGet = await c.GetEntity<TestKeyEntity>(k);
 
             Assert.IsNotNull(resultGet);
 
             Assert.IsTrue(resultGet.PersonName == "Jordan3");
+
+            var resultDelete = await c.Delete<TestKeyEntity>(k);
+
+            Assert.IsTrue(resultDelete);
+
+            var resultGet2 = await c.GetEntity<TestKeyEntity>(k);
+
+            Assert.IsNull(resultGet2);
         }
     }
 }

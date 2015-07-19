@@ -19,6 +19,7 @@ using Xamling.Azure.Storage;
 using XamlingCore.Portable.Contract.Config;
 using XamlingCore.Portable.Contract.Entities;
 using XamlingCore.Portable.Contract.Repos.Base;
+using XamlingCore.Portable.Model.Other;
 
 namespace Xamling.Azure.Glue
 {
