@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,6 +35,23 @@ namespace Xamling.Azure.DocumentDB
             }
 
             return _database;
+        }
+
+        public async Task<bool> DeleteDatabase(string databaseId)
+        {
+            var db = _client.CreateDatabaseQuery()
+                        .Where(d => d.Id == databaseId)
+                        .AsEnumerable()
+                        .FirstOrDefault();
+
+            if (db == null)
+            {
+                return true;
+            }
+
+            await _client.DeleteDatabaseAsync(db.SelfLink);
+
+            return true;
         }
 
         public async Task<Database> GetDatabase(string databaseId)

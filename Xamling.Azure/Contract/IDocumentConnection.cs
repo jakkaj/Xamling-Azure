@@ -11,5 +11,6 @@ namespace Xamling.Azure.DocumentDB
         Task<Database> GetDatabase();
         Task<DocumentCollection> GetCollection();
         DocumentClient Client { get; }
+        Task<bool> DeleteDatabase(string databaseId);
     }
 }

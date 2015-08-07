@@ -35,9 +35,9 @@ namespace Xamling.Azure.Glue
             builder.Register(
                 _ =>
                     new DocumentClient(new Uri(_.Resolve<IConfig>()["DocumentDatabaseUri"]),
-                        _.Resolve<IConfig>()["DocumentDatabaseAuth"])).InstancePerRequest();
+                        _.Resolve<IConfig>()["DocumentDatabaseAuth"])).SingleInstance();
 
-            builder.RegisterType<DocumentConnection>().As<IDocumentConnection>().InstancePerRequest();
+            builder.RegisterType<DocumentConnection>().As<IDocumentConnection>().SingleInstance();
 
             builder.RegisterType<DocumentEntityCache>().As<IDocumentEntityCache>().InstancePerRequest();
 

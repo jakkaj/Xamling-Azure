@@ -41,6 +41,16 @@ namespace Xamling.Azure.IntegrationTests.Tests
             Assert.IsNotNull(collection);
         }
 
+        [TestMethod]
+        public async Task TestDeleteDatabase()
+        {
+            var c = Resolve<IDocumentConnection>();
+
+            var db = await c.DeleteDatabase("TestDatabase");
+
+            Assert.IsTrue(db);
+        }
+
         public class SomeClass
         {
             public Guid Id { get; set; }
