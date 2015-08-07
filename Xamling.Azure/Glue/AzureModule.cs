@@ -1,10 +1,13 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using AutoMapper;
 using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.Azure.Documents.Client;
 using Microsoft.WindowsAzure.Storage;
 using StackExchange.Redis;
 using Xamling.Azure.Blob;
 using Xamling.Azure.Contract;
+using Xamling.Azure.DocumentDB;
 using Xamling.Azure.EntityCaches;
 using Xamling.Azure.EntityList;
 using Xamling.Azure.Logger;
@@ -28,6 +31,17 @@ namespace Xamling.Azure.Glue
         protected override void Load(ContainerBuilder builder)
         {
             Mapper.CreateMap<XSeverityLevel, SeverityLevel>();
+
+            builder.Register(
+                _ =>
+                    new DocumentClient(new Uri(_.Resolve<IConfig>()["DocumentDatabaseUri"]),
+                        _.Resolve<IConfig>()["DocumentDatabaseAuth"])).InstancePerRequest();
+
+            builder.RegisterType<DocumentConnection>().As<IDocumentConnection>().InstancePerRequest();
+
+            builder.RegisterType<DocumentEntityCache>().As<IDocumentEntityCache>().InstancePerRequest();
+
+            builder.RegisterGeneric(typeof(DocumentRepo<>)).As(typeof(IDocumentRepo<>)).InstancePerRequest();
 
             builder.Register(_ => CloudStorageAccount.Parse(_.Resolve<IConfig>()["StorageConnectionString"]))
                 .AsSelf()
