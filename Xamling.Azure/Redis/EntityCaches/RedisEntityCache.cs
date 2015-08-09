@@ -11,13 +11,13 @@ using XamlingCore.Portable.Model.Resiliency;
 
 namespace Xamling.Azure.Redis.EntityCaches
 {
-    public class SharedRedisEntityCache : KeyEntityBase, ISharedRedisEntityCache
+    public class RedisEntityCache : KeyEntityBase, IRedisEntityCache
     {
         private readonly IDatabase _database;
         private readonly ISubscriber _subs;
         private readonly IEntitySerialiser _entitySerialiser;
 
-        public SharedRedisEntityCache(IDatabase database, ISubscriber subs, IEntitySerialiser serialiser)
+        public RedisEntityCache(IDatabase database, ISubscriber subs, IEntitySerialiser serialiser)
         {
             _database = database;
             _subs = subs;

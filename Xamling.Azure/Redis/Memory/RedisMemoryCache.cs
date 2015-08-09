@@ -6,11 +6,11 @@ using XamlingCore.Portable.Model.Cache;
 
 namespace Xamling.Azure.Redis.Memory
 {
-    public class SharedRedisMemoryCache : ISharedRedisMemoryCache
+    public class RedisMemoryCache : IRedisMemoryCache
     {
         private readonly IRedisEntityCache _redisCache;
 
-        public SharedRedisMemoryCache(IRedisEntityCache redisCache)
+        public RedisMemoryCache(IRedisEntityCache redisCache)
         {
             _redisCache = redisCache;
         }

@@ -45,11 +45,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Contract\Cache\ISecureSessionRedisMemoryCache.cs" />
-    <Compile Include="Contract\Cache\ISecureSessionEntityCache.cs" />
-    <Compile Include="Contract\Cache\IDefaultSessionRedisEntityCache.cs" />
-    <Compile Include="Contract\Cache\IOverrideSessionRedisMemoryCache.cs" />
-    <Compile Include="Contract\Cache\ISharedMemoryCache.cs" />
+    <Compile Include="Contract\Cache\IRedisMemoryCache.cs" />
     <Compile Include="Contract\IBlobRepo.cs" />
     <Compile Include="Contract\IBlobRepoFactory.cs" />
     <Compile Include="Contract\Cache\IDocumentEntityCache.cs" />
@@ -60,11 +56,7 @@
     <Compile Include="Contract\IJWTParser.cs" />
     <Compile Include="Contract\IKeyEntity.cs" />
     <Compile Include="Contract\ILogService.cs" />
-    <Compile Include="Contract\Cache\IOverrideSessionEntityCache.cs" />
-    <Compile Include="Contract\Cache\IOverrideSessionRedisEntityCache.cs" />
     <Compile Include="Contract\Cache\IRedisEntityCache.cs" />
-    <Compile Include="Contract\Cache\ISharedEntityCache.cs" />
-    <Compile Include="Contract\Cache\ISharedRedisEntityCache.cs" />
     <Compile Include="Contract\IQueueMessageRepo.cs" />
     <Compile Include="Entity\QueueMessageWrapper.cs" />
     <Compile Include="Entity\XDocumentCacheItem.cs" />

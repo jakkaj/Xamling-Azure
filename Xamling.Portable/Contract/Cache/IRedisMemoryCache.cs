@@ -2,8 +2,7 @@
 
 namespace Xamling.Azure.Portable.Contract.Cache
 {
-    public interface ISecureSessionEntityCache : IEntityCache
+    public interface IRedisMemoryCache : IMemoryCache
     {
-
     }
 }

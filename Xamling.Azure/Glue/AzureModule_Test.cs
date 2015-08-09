@@ -1,14 +1,11 @@
 ﻿using System;
 using Autofac;
-using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.WindowsAzure.Storage;
 using StackExchange.Redis;
 using Xamling.Azure.Blob;
 using Xamling.Azure.Contract;
 using Xamling.Azure.DocumentDB;
-using Xamling.Azure.EntityCaches;
-using Xamling.Azure.EntityList;
 using Xamling.Azure.Logger;
 using Xamling.Azure.Portable.Contract;
 using Xamling.Azure.Portable.Contract.Cache;
@@ -53,7 +50,6 @@ namespace Xamling.Azure.Glue
                 .SingleInstance();
 
 
-
             builder.RegisterGeneric(typeof (QueueMessageRepo<>)).As(typeof (IQueueMessageRepo<>)).SingleInstance();
 
             builder.RegisterType<RedisConnection>().As<IRedisConnection>().SingleInstance();
@@ -61,26 +57,20 @@ namespace Xamling.Azure.Glue
             builder.Register(_=>_.Resolve<IRedisConnection>().GetDatabase()).As<IDatabase>();
             builder.Register(_ => _.Resolve<IRedisConnection>().GetSubscriber()).As<ISubscriber>();
 
-            builder.RegisterType<SharedRedisEntityCache>().As<IRedisEntityCache>();
+            builder.RegisterType<RedisEntityCache>().As<IRedisEntityCache>();
            
-            builder.RegisterType<SharedRedisEntityCache>().As<ISharedRedisEntityCache>();
-           
+            builder.RegisterType<RedisEntityCache>().As<IRedisEntityCache>();
 
-            builder.RegisterType<SharedRedisMemoryCache>().As<IMemoryCache>();
-            builder.RegisterType<SharedRedisMemoryCache>().As<ISharedRedisMemoryCache>();
-            builder.RegisterType<SecureSessionSessionRedisMemoryCache>().As<ISecureSessionRedisMemoryCache>();
-            builder.RegisterType<OverrideSessionSessionRedisMemoryCache>().As<IOverrideSessionRedisMemoryCache>().InstancePerDependency();
+            builder.RegisterType<RedisMemoryCache>().As<IMemoryCache>();
+            builder.RegisterType<RedisMemoryCache>().As<IRedisMemoryCache>();
 
+            
             builder.RegisterType<BlobRepo>().As<IBlobRepo>();
             builder.RegisterType<BlobRepoFactory>().As<IBlobRepoFactory>();
 
             builder.RegisterType<BlobStorageFileRepo>().As<IStorageFileRepo>();
 
-            builder.RegisterType<SharedEntityCache>().As<ISharedEntityCache>();
-
             builder.RegisterType<LogService>().As<ILogService>().SingleInstance();
-            builder.RegisterGeneric(typeof(EntityLister<>)).As(typeof(IEntityLister<>));
-            
         }
     }
 }
