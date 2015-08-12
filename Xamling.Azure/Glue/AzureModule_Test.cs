@@ -70,7 +70,7 @@ namespace Xamling.Azure.Glue
 
             builder.RegisterType<BlobStorageFileRepo>().As<IStorageFileRepo>();
 
-            builder.RegisterType<LogService>().As<ILogService>().SingleInstance();
+            builder.RegisterType<MockLogService>().As<ILogService>().SingleInstance();
         }
     }
 }

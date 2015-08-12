@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Xamling.Azure.Portable.Contract;
 using XamlingCore.Portable.Model.Other;
 using XamlingCore.Portable.Model.Response;
 using XamlingCore.Portable.View.ViewModel;
 
-namespace RZ.NET.Tests.Mocks
+namespace Xamling.Azure.Logger
 {
     public class MockLogService : ILogService
     {
