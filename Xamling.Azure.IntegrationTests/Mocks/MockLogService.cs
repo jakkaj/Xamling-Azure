@@ -62,9 +62,9 @@ namespace RZ.NET.Tests.Mocks
 
         }
 
-        public void TrackOperation<T>(XResult<T> operation)
+        public XResult<T> TrackOperation<T>(XResult<T> operation, string operationName = null)
         {
-
+            return operation;
         }
 
        

@@ -72,7 +72,7 @@ namespace Xamling.Azure.Logger
             _telemetry.TrackTrace(message, Mapper.Map<SeverityLevel>(severityLevel), properties);
         }
 
-        public void TrackOperation<T>(XResult<T> operation, string operationName = null)
+        public XResult<T> TrackOperation<T>(XResult<T> operation, string operationName = null)
         {
             var op = _entitySerialiser.Serialise(operation);
 
@@ -94,10 +94,12 @@ namespace Xamling.Azure.Logger
             {
                 dict.Add("ExceptionType", "XResult");
                 TrackException(operation.Exception, dict);
-                return;
+                return operation;
             }
 
             TrackTrace("XResult", operation.IsSuccess ? XSeverityLevel.Information : XSeverityLevel.Error, dict);
+
+            return operation;
         }
     }
 }
