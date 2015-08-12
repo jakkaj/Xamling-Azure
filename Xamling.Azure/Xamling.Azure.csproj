@@ -206,6 +206,7 @@
     <Compile Include="Glue\AzureModule_NonWeb.cs" />
     <Compile Include="Glue\AzureModule_Test.cs" />
     <Compile Include="Glue\AzureModule.cs" />
+    <Compile Include="Logger\LogExtensions.cs" />
     <Compile Include="Logger\LogService.cs" />
     <Compile Include="Logger\MockLogService.cs" />
     <Compile Include="Notifications\AzureNotificationService.cs" />

@@ -9,6 +9,7 @@ using Microsoft.ApplicationInsights.DataContracts;
 using Xamling.Azure.Portable.Contract;
 using Xamling.Azure.Portable.Entity;
 using XamlingCore.Portable.Contract.Serialise;
+using XamlingCore.Portable.Contract.Services;
 using XamlingCore.Portable.Model.Other;
 using XamlingCore.Portable.Model.Response;
 
@@ -17,10 +18,13 @@ namespace Xamling.Azure.Logger
     public class LogService : ILogService
     {
         private readonly IEntitySerialiser _entitySerialiser;
+        private readonly IContextInfoService _contextInfoService;
         private readonly TelemetryClient _telemetry;
-        public LogService(IEntitySerialiser entitySerialiser)
+        public LogService(IEntitySerialiser entitySerialiser, 
+            IContextInfoService contextInfoService)
         {
             _entitySerialiser = entitySerialiser;
+            _contextInfoService = contextInfoService;
             _telemetry = new TelemetryClient();
         }
 
@@ -89,6 +93,14 @@ namespace Xamling.Azure.Logger
             dict.Add("Result", operation.ResultCode.ToString());
             dict.Add("StatusCode", operation.StatusCode.ToString());
             dict.Add("XResult", op);
+
+            if (_contextInfoService.Context != null)
+            {
+                foreach (var i in _contextInfoService.Context)
+                {
+                    dict.Add(i.Key, i.Value);
+                }
+            }
 
             if (operation.ResultCode == OperationResults.Exception || operation.Exception != null)
             {
