@@ -24,6 +24,6 @@ namespace Xamling.Azure.Portable.Contract
         void TrackTrace(string message, IDictionary<string, string> properties);
         void TrackTrace(string message, XSeverityLevel severityLevel);
         void TrackTrace(string message, XSeverityLevel severityLevel, IDictionary<string, string> properties);
-        void TrackOperation<T>(XResult<T> operation);
+        void TrackOperation<T>(XResult<T> operation, string operationName = null);
     }
 }

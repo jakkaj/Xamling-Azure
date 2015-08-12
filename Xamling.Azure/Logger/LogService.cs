@@ -56,12 +56,12 @@ namespace Xamling.Azure.Logger
         {
             _telemetry.TrackTrace(message);
         }
-      
+
         public void TrackTrace(string message, IDictionary<string, string> properties)
         {
             _telemetry.TrackTrace(message, properties);
         }
-        
+
         public void TrackTrace(string message, XSeverityLevel severityLevel)
         {
             _telemetry.TrackTrace(message, Mapper.Map<SeverityLevel>(severityLevel));
@@ -72,27 +72,32 @@ namespace Xamling.Azure.Logger
             _telemetry.TrackTrace(message, Mapper.Map<SeverityLevel>(severityLevel), properties);
         }
 
-        public void TrackOperation<T>(XResult<T> operation)
+        public void TrackOperation<T>(XResult<T> operation, string operationName = null)
         {
-                var op = _entitySerialiser.Serialise(operation);
+            var op = _entitySerialiser.Serialise(operation);
 
-                var dict = new Dictionary<string, string>();
+            var dict = new Dictionary<string, string>();
 
-                dict.Add("Id", operation.Id.ToString());
-                dict.Add("Message", operation.Message);
-                dict.Add("CallerMemberName", operation.CallerInfo.MemberName);
-                dict.Add("Result", operation.ResultCode.ToString());
-                dict.Add("StatusCode", operation.StatusCode.ToString());
-                dict.Add("XResult", op);
+            if (operationName != null)
+            {
+                dict.Add("Name", operationName);
+            }
 
-                if (operation.ResultCode == OperationResults.Exception || operation.Exception != null)
-                {
-                    dict.Add("ExceptionType", "XResult");
-                    TrackException(operation.Exception, dict);
-                    return;
-                }
+            dict.Add("Id", operation.Id.ToString());
+            dict.Add("Message", operation.Message);
+            dict.Add("CallerMemberName", operation.CallerInfo.MemberName);
+            dict.Add("Result", operation.ResultCode.ToString());
+            dict.Add("StatusCode", operation.StatusCode.ToString());
+            dict.Add("XResult", op);
 
-                TrackTrace("XResult", operation.IsSuccess ? XSeverityLevel.Information : XSeverityLevel.Error, dict);
+            if (operation.ResultCode == OperationResults.Exception || operation.Exception != null)
+            {
+                dict.Add("ExceptionType", "XResult");
+                TrackException(operation.Exception, dict);
+                return;
+            }
+
+            TrackTrace("XResult", operation.IsSuccess ? XSeverityLevel.Information : XSeverityLevel.Error, dict);
         }
     }
 }
