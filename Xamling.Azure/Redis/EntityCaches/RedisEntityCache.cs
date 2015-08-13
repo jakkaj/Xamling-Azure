@@ -118,6 +118,7 @@ namespace Xamling.Azure.Redis.EntityCaches
 
         public async Task<T> GetCacheItem<T>(string key, TimeSpan? maxAge = null) where T : class, new()
         {
+            Debug.WriteLine($"Redis: Getting ${key}");
             if (!_database.Multiplexer.IsConnected)
             {
                 return null;
@@ -232,6 +233,7 @@ namespace Xamling.Azure.Redis.EntityCaches
 
         public async Task<bool> SetEntity<T>(string key, T item, TimeSpan? maxAge) where T : class, new()
         {
+            Debug.WriteLine($"Redis: Setting ${key}");
             if (!_database.Multiplexer.IsConnected)
             {
                 return false;

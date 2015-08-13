@@ -58,6 +58,7 @@ namespace Xamling.Azure.DocumentDB
 
         public async Task<T> GetCacheItem<T>(string key, TimeSpan? maxAge = null) where T : class, new()
         {
+            Debug.WriteLine($"DocumentCache: Getting ${key}");
             var fullName = _getFullKey<T>(key);
 
             var item = await _getRepo<T>().Get(fullName); 
@@ -107,6 +108,8 @@ namespace Xamling.Azure.DocumentDB
 
         public async Task<bool> SetEntity<T>(string key, T item, TimeSpan? maxAge) where T : class, new()
         {
+            Debug.WriteLine($"DocumentCache: Setting ${key}");
+
             var fullName = _getFullKey<T>(key);
 
             var i = new XDocumentCacheItem<T>();
