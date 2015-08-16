@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Autofac;
 using Microsoft.Azure.Documents;
@@ -17,7 +18,7 @@ using XamlingCore.Portable.Model.Cache;
 namespace Xamling.Azure.DocumentDB
 {
     public class DocumentEntityCache : IDocumentEntityCache
-       
+
     {
         private readonly ILifetimeScope _scope;
 
@@ -27,7 +28,7 @@ namespace Xamling.Azure.DocumentDB
         }
 
         public async Task<T> GetEntity<T>(string key, Func<Task<T>> sourceTask, TimeSpan? maxAge = null,
-            bool allowExpired = true, bool allowZeroList = true) where T: class, new()
+            bool allowExpired = true, bool allowZeroList = true) where T : class, new()
         {
             var e = await GetEntity<T>(key);
 
@@ -51,7 +52,22 @@ namespace Xamling.Azure.DocumentDB
             return result;
         }
 
-        private IDocumentRepo<XDocumentCacheItem<T>>_getRepo<T>() where T :class, new()
+        public async Task<List<T>> QueryEntity<T>(Expression<Func<XDocumentCacheItem<T>, bool>> query) where T : class, new()
+        {
+            var repo = _getRepo<T>();
+            var typePath = _getTypePath<T>();
+
+            var result = await repo.GetList(query, _ => _.Id.Contains($"cache:cache_{typePath}"));
+
+            if (!result)
+            {
+                return null;
+            }
+
+            return result.Object.Select(_ => _.Item).ToList();
+        }
+
+        private IDocumentRepo<XDocumentCacheItem<T>> _getRepo<T>() where T : class, new()
         {
             return _scope.Resolve<IDocumentRepo<XDocumentCacheItem<T>>>();
         }
@@ -61,7 +77,7 @@ namespace Xamling.Azure.DocumentDB
             Debug.WriteLine($"DocumentCache: Getting ${key}");
             var fullName = _getFullKey<T>(key);
 
-            var item = await _getRepo<T>().Get(fullName); 
+            var item = await _getRepo<T>().Get(fullName);
 
             if (!item || item.Object?.Item == null)
             {
@@ -77,7 +93,7 @@ namespace Xamling.Azure.DocumentDB
         }
 
         bool _validateAge<T>(XDocumentCacheItem<T> item, TimeSpan? maxAge = null)
-            where T: class, new()
+            where T : class, new()
         {
             if (item.MaxAge == null && maxAge == null)
             {
@@ -94,6 +110,8 @@ namespace Xamling.Azure.DocumentDB
 
             return dtWithMaxAge < dt;
         }
+
+
 
         public async Task<T> GetEntity<T>(string key) where T : class, new()
         {
@@ -115,7 +133,7 @@ namespace Xamling.Azure.DocumentDB
             var i = new XDocumentCacheItem<T>();
             i.Item = item;
             i.Id = fullName;
-            
+
             i.DateStamp = DateTime.UtcNow;
             i.MaxAge = maxAge;
 
@@ -124,47 +142,12 @@ namespace Xamling.Azure.DocumentDB
             return result != null;
         }
 
-
-        public Task Clear()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<bool> Delete<T>(string key) where T : class, new()
         {
             var fullName = _getFullKey<T>(key);
-            return  await _getRepo<T>().Delete(fullName);
+            return await _getRepo<T>().Delete(fullName);
         }
 
-        public Task DisableMemoryCache()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task EnableMemoryCache()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<T>> GetAll<T>() where T : class, new()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteAll<T>() where T : class, new()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TimeSpan?> GetAge<T>(string key) where T : class, new()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> ValidateAge<T>(string key) where T : class, new()
-        {
-            throw new NotImplementedException();
-        }
 
         string _getFullKey<T>(string key)
         {
@@ -206,7 +189,5 @@ namespace Xamling.Azure.DocumentDB
 
             return tName;
         }
-
-
     }
 }

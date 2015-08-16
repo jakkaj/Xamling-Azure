@@ -7,6 +7,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using LinqKit;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
@@ -57,12 +58,17 @@ namespace Xamling.Azure.DocumentDB
             return await GetList(_ => _.Id == key);
         }
 
-        public async Task<XResult<IList<T>>> GetList(Expression<Func<T, bool>> query)
+        public async Task<XResult<IList<T>>> GetList(Expression<Func<T, bool>> query, Expression<Func<T, bool>> secondQuery = null)
         {
             await _init();
 
             var q = _client.CreateDocumentQuery<T>(_collection.DocumentsLink)
                 .Where(query);
+
+            if (secondQuery != null)
+            {
+                q = q.Where(secondQuery);
+            }
 
             var documents = await _queryAsync(q);
 
