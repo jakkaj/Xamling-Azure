@@ -51,16 +51,25 @@ namespace Xamling.Azure.DocumentDB
             return await GetList(_ => _.Id == key);
         }
 
-        public async Task<XResult<IList<T>>> GetList(Expression<Func<T, bool>> query, Expression<Func<T, bool>> secondQuery = null)
+        public async Task<XResult<IList<T>>> GetList(params Expression<Func<T, bool>>[] queries)
         {
+            if (queries.Length == 0)
+            {
+                return XResult<IList<T>>.GetBadRequest("No queries passed in to GetList");
+            }
+
             await _init();
 
             var q = _client.CreateDocumentQuery<T>(_collection.DocumentsLink)
-                .Where(query);
+                .Where(queries[0]);
 
-            if (secondQuery != null)
+            foreach (var subQuery in queries)
             {
-                q = q.Where(secondQuery);
+                if (subQuery == queries[0])
+                {
+                    continue;
+                }
+                q = q.Where(subQuery);
             }
 
             var documents = await _queryAsync(q);

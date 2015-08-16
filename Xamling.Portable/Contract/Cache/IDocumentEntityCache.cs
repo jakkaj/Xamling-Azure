@@ -9,6 +9,6 @@ namespace Xamling.Azure.Portable.Contract.Cache
 {
     public interface IDocumentEntityCache : IEntityCache
     {
-        Task<List<T>> QueryEntity<T>(Expression<Func<XDocumentCacheItem<T>, bool>> query) where T : class, new();
+        Task<List<T>> QueryEntity<T>(params Expression<Func<XDocumentCacheItem<T>, bool>>[] queries) where T : class, new();
     }
 }

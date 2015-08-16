@@ -52,12 +52,15 @@ namespace Xamling.Azure.DocumentDB
             return result;
         }
 
-        public async Task<List<T>> QueryEntity<T>(Expression<Func<XDocumentCacheItem<T>, bool>> query) where T : class, new()
+        public async Task<List<T>> QueryEntity<T>(params Expression<Func<XDocumentCacheItem<T>, bool>>[] queries) where T : class, new()
         {
             var repo = _getRepo<T>();
             var typePath = _getTypePath<T>();
 
-            var result = await repo.GetList(query, _ => _.Id.Contains($"cache:cache_{typePath}"));
+            var q = queries.ToList();
+            q.Add(_ => _.Id.Contains($"cache:cache_{typePath}"));
+
+            var result = await repo.GetList(q.ToArray());
 
             if (!result)
             {
