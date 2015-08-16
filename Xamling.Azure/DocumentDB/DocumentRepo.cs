@@ -51,6 +51,27 @@ namespace Xamling.Azure.DocumentDB
             return await GetList(_ => _.Id == key);
         }
 
+        public async Task<XResult<IList<T>>> GetListSQL(string query)
+        {
+            var q = _client.CreateDocumentQuery<T>(_collection.DocumentsLink, query);
+        
+            var documents = await _queryAsync(q);
+
+            if (!documents)
+            {
+                return documents.Copy<IList<T>>();
+            }
+
+            var listItems = documents.Object;
+
+            if (listItems == null || listItems.Count == 0)
+            {
+                return XResult<IList<T>>.GetNotFound();
+            }
+
+            return new XResult<IList<T>>(listItems);
+        }
+
         public async Task<XResult<IList<T>>> GetList(params Expression<Func<T, bool>>[] queries)
         {
             if (queries.Length == 0)
@@ -62,7 +83,7 @@ namespace Xamling.Azure.DocumentDB
 
             var q = _client.CreateDocumentQuery<T>(_collection.DocumentsLink)
                 .Where(queries[0]);
-
+           
             foreach (var subQuery in queries)
             {
                 if (subQuery == queries[0])

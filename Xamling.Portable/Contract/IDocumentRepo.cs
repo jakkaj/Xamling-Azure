@@ -13,5 +13,6 @@ namespace Xamling.Azure.Portable.Contract
         Task<XResult<T>> AddOrUpdate(T entity, TimeSpan? maxAge = null);
         Task<XResult<bool>> Delete(string key);
         Task<XResult<IList<T>>> GetList(params Expression<Func<T, bool>>[] queries);
+        Task<XResult<IList<T>>> GetListSQL(string query);
     }
 }

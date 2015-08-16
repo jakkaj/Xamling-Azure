@@ -75,6 +75,12 @@ namespace Xamling.Azure.IntegrationTests.Tests
 
             Assert.IsNotNull(query2);
             Assert.IsTrue(query2.Count > 0);
+
+
+            var query3 = await i.QueryEntity<OtherTestKeyEntity>("SELECT * FROM TestCollection C Where C.Item.PersonName = 'PersonName'");
+
+            Assert.IsNotNull(query3);
+            Assert.IsTrue(query3.Count > 0);
         }
     }
 }
