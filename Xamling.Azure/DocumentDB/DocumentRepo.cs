@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
-using LinqKit;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
-using Microsoft.WindowsAzure.Storage.Table;
 using Xamling.Azure.Portable.Contract;
-using XamlingCore.Portable.Contract.Serialise;
-using XamlingCore.Portable.Model.Cache;
 using XamlingCore.Portable.Model.Response;
 
 namespace Xamling.Azure.DocumentDB
