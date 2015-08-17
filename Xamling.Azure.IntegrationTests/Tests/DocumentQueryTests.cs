@@ -81,6 +81,14 @@ namespace Xamling.Azure.IntegrationTests.Tests
 
             Assert.IsNotNull(query3);
             Assert.IsTrue(query3.Count > 0);
+
+            var query4actual = i.GetQuery<OtherTestKeyEntity>();
+
+            query4actual = query4actual.Where(_ => _.Item.PersonName == "PersonName");
+
+            var query4 = await i.Query(query4actual);
+            Assert.IsNotNull(query4);
+            Assert.IsTrue(query4.Count > 0);
         }
     }
 }

@@ -68,6 +68,27 @@ namespace Xamling.Azure.DocumentDB
             return result.Object.Select(_ => _.Item).ToList();
         }
 
+        public IQueryable<XDocumentCacheItem<T>> GetQuery<T>() where T : class, new()
+        {
+            var q = _getRepo<T>().GetQuery();
+
+            return q;
+        }
+
+        public async Task<List<T>> Query<T>(IQueryable<XDocumentCacheItem<T>> query) where T : class, new()
+        {
+            var repo = _getRepo<T>();
+
+            var result = await repo.Query(query);
+
+            if (!result)
+            {
+                return null;
+            }
+
+            return result.Object.Select(_ => _.Item).ToList();
+        }
+
         public async Task<List<T>> QueryEntity<T>(params Expression<Func<XDocumentCacheItem<T>, bool>>[] queries) where T : class, new()
         {
             var repo = _getRepo<T>();

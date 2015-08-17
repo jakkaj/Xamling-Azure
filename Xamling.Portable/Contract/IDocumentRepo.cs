@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using XamlingCore.Portable.Model.Response;
@@ -14,5 +15,7 @@ namespace Xamling.Azure.Portable.Contract
         Task<XResult<bool>> Delete(string key);
         Task<XResult<IList<T>>> GetList(params Expression<Func<T, bool>>[] queries);
         Task<XResult<IList<T>>> GetListSQL(string query);
+        IQueryable<T> GetQuery();
+        Task<XResult<IList<T>>> Query(IQueryable<T> query);
     }
 }

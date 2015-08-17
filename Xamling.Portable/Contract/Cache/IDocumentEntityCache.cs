@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Xamling.Azure.Portable.Entity;
@@ -13,5 +14,8 @@ namespace Xamling.Azure.Portable.Contract.Cache
 
         Task<List<T>> QueryEntity<T>(string query)
             where T : class, new();
+
+        IQueryable<XDocumentCacheItem<T>> GetQuery<T>() where T : class, new();
+        Task<List<T>> Query<T>(IQueryable<XDocumentCacheItem<T>> query) where T : class, new();
     }
 }

@@ -51,6 +51,32 @@ namespace Xamling.Azure.DocumentDB
             return await GetList(_ => _.Id == key);
         }
 
+        public IQueryable<T> GetQuery()
+        {
+            var q = _client.CreateDocumentQuery<T>(_collection.DocumentsLink);
+
+            return q;
+        }
+
+        public async Task<XResult<IList<T>>> Query(IQueryable<T> query)
+        {
+            var documents = await _queryAsync(query);
+
+            if (!documents)
+            {
+                return documents.Copy<IList<T>>();
+            }
+
+            var listItems = documents.Object;
+
+            if (listItems == null || listItems.Count == 0)
+            {
+                return XResult<IList<T>>.GetNotFound();
+            }
+
+            return new XResult<IList<T>>(listItems);
+        }
+
         public async Task<XResult<IList<T>>> GetListSQL(string query)
         {
             var q = _client.CreateDocumentQuery<T>(_collection.DocumentsLink, query);
@@ -167,6 +193,8 @@ namespace Xamling.Azure.DocumentDB
         //        where allowExpired || _isValidMaxAge(xCacheItem)
         //        select xCacheItem.Item).ToList();
         //}
+
+
 
         private async Task<XResult<IList<T>>> _queryAsync(IQueryable<T> query)
         {
