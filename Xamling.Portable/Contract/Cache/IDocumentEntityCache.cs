@@ -15,7 +15,7 @@ namespace Xamling.Azure.Portable.Contract.Cache
         Task<List<T>> QueryEntity<T>(string query)
             where T : class, new();
 
-        IQueryable<XDocumentCacheItem<T>> GetQuery<T>() where T : class, new();
+        Task<IQueryable<XDocumentCacheItem<T>>> GetQuery<T>() where T : class, new();
         Task<List<T>> Query<T>(IQueryable<XDocumentCacheItem<T>> query) where T : class, new();
     }
 }

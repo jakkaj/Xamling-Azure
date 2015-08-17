@@ -51,8 +51,10 @@ namespace Xamling.Azure.DocumentDB
             return await GetList(_ => _.Id == key);
         }
 
-        public IQueryable<T> GetQuery()
+        public async Task<IQueryable<T>> GetQuery()
         {
+            await _init();
+
             var q = _client.CreateDocumentQuery<T>(_collection.DocumentsLink);
 
             return q;
@@ -60,6 +62,8 @@ namespace Xamling.Azure.DocumentDB
 
         public async Task<XResult<IList<T>>> Query(IQueryable<T> query)
         {
+            await _init();
+
             var documents = await _queryAsync(query);
 
             if (!documents)
@@ -79,6 +83,8 @@ namespace Xamling.Azure.DocumentDB
 
         public async Task<XResult<IList<T>>> GetListSQL(string query)
         {
+            await _init();
+
             var q = _client.CreateDocumentQuery<T>(_collection.DocumentsLink, query);
         
             var documents = await _queryAsync(q);

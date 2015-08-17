@@ -15,7 +15,7 @@ namespace Xamling.Azure.Portable.Contract
         Task<XResult<bool>> Delete(string key);
         Task<XResult<IList<T>>> GetList(params Expression<Func<T, bool>>[] queries);
         Task<XResult<IList<T>>> GetListSQL(string query);
-        IQueryable<T> GetQuery();
+        Task<IQueryable<T>> GetQuery();
         Task<XResult<IList<T>>> Query(IQueryable<T> query);
     }
 }
