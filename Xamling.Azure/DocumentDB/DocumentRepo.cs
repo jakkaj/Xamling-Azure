@@ -8,6 +8,7 @@ using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 using Xamling.Azure.Portable.Contract;
+using XamlingCore.Portable.Data.Mapper;
 using XamlingCore.Portable.Model.Response;
 
 namespace Xamling.Azure.DocumentDB

@@ -85,48 +85,12 @@
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="XamlingCore.Portable.Contract, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XamlingCore.2.0.141\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\XamlingCore.Portable.Contract.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="XamlingCore.Portable.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XamlingCore.2.0.141\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\XamlingCore.Portable.Data.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="XamlingCore.Portable.Glue, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XamlingCore.2.0.141\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\XamlingCore.Portable.Glue.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="XamlingCore.Portable.Messages, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XamlingCore.2.0.141\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\XamlingCore.Portable.Messages.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="XamlingCore.Portable.Model, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XamlingCore.2.0.141\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\XamlingCore.Portable.Model.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="XamlingCore.Portable.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XamlingCore.2.0.141\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\XamlingCore.Portable.Net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="XamlingCore.Portable.Service, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XamlingCore.2.0.141\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\XamlingCore.Portable.Service.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="XamlingCore.Portable.Util, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XamlingCore.2.0.141\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\XamlingCore.Portable.Util.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="XamlingCore.Portable.View, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XamlingCore.2.0.141\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\XamlingCore.Portable.View.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="XamlingCore.Portable.Workflow, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XamlingCore.2.0.141\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\XamlingCore.Portable.Workflow.dll</HintPath>
+    <Reference Include="XamlingCore.Portable, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\XamlingCore.2.0.143\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\XamlingCore.Portable.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="XamlingCore.XamarinThings, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XamlingCore.2.0.141\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\XamlingCore.XamarinThings.dll</HintPath>
+      <HintPath>..\packages\XamlingCore.2.0.143\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\XamlingCore.XamarinThings.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
