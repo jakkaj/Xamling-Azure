@@ -193,16 +193,7 @@ namespace Xamling.Azure.DocumentDB
             return new XResult<bool>(true);
         }
 
-        //List<T> _getItems(IEnumerable<XCacheItem<T>> cacheItems, bool allowExpired = false)
-        //{
-        //    return (
-        //        from xCacheItem in cacheItems
-        //        where allowExpired || _isValidMaxAge(xCacheItem)
-        //        select xCacheItem.Item).ToList();
-        //}
-
-
-
+       
         private async Task<XResult<IList<T>>> _queryAsync(IQueryable<T> query)
         {
             var docQuery = query.AsDocumentQuery();
@@ -225,18 +216,6 @@ namespace Xamling.Azure.DocumentDB
 
             return new XResult<IList<T>>(docs);
         }
-
-        //bool _isValidMaxAge(XCacheItem<T> item)
-        //{
-        //    if (!item.MaxAge.HasValue)
-        //    {
-        //        return true;
-        //    }
-
-        //    var expiresTime = item.DateStamp.Add(item.MaxAge.Value);
-
-        //    return expiresTime > DateTime.UtcNow;
-        //}
 
         public async Task<XResult<T>> OperationWrap(Func<Task<T>> func)
         {

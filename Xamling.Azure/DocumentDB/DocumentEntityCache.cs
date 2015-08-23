@@ -13,11 +13,12 @@ using Xamling.Azure.Portable.Contract;
 using Xamling.Azure.Portable.Contract.Cache;
 using Xamling.Azure.Portable.Entity;
 using XamlingCore.Portable.Contract.Serialise;
+using XamlingCore.Portable.Data.Entities;
 using XamlingCore.Portable.Model.Cache;
 
 namespace Xamling.Azure.DocumentDB
 {
-    public class DocumentEntityCache : IDocumentEntityCache
+    public class DocumentEntityCache : KeyEntityBase, IDocumentEntityCache
 
     {
         private readonly ILifetimeScope _scope;
@@ -56,8 +57,7 @@ namespace Xamling.Azure.DocumentDB
             where T : class, new()
         {
             var repo = _getRepo<T>();
-            var typePath = _getTypePath<T>();
-
+            
             var result = await repo.GetListSQL(query);
 
             if (!result)
@@ -116,6 +116,7 @@ namespace Xamling.Azure.DocumentDB
         public async Task<T> GetCacheItem<T>(string key, TimeSpan? maxAge = null) where T : class, new()
         {
             Debug.WriteLine($"DocumentCache: Getting ${key}");
+
             var fullName = _getFullKey<T>(key);
 
             var item = await _getRepo<T>().Get(fullName);
@@ -189,11 +190,15 @@ namespace Xamling.Azure.DocumentDB
             return await _getRepo<T>().Delete(fullName);
         }
 
+        public override string GetKey(string key)
+        {
+            return base.GetKey(key);
+        }
 
         string _getFullKey<T>(string key)
         {
             var path = String.Join(":", _getDirPath<T>(), string.Format("{0}.cache", key));
-            return path;
+            return GetKey(path);
         }
 
         string _getDirPath<T>()

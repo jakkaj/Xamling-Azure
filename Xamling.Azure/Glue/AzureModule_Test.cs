@@ -27,11 +27,11 @@ namespace Xamling.Azure.Glue
 
             builder.Register(_ => new DocumentClient(new Uri(_.Resolve<IConfig>()["DocumentDatabaseUri"]), _.Resolve<IConfig>()["DocumentDatabaseAuth"]));
 
-            builder.RegisterType<DocumentConnection>().As<IDocumentConnection>().SingleInstance();
+            builder.RegisterType<DocumentConnection>().As<IDocumentConnection>().InstancePerLifetimeScope();
 
-            builder.RegisterType<DocumentEntityCache>().As<IDocumentEntityCache>().SingleInstance();
+            builder.RegisterType<DocumentEntityCache>().As<IDocumentEntityCache>();
 
-            builder.RegisterGeneric(typeof(DocumentRepo<>)).As(typeof(IDocumentRepo<>)).SingleInstance();
+            builder.RegisterGeneric(typeof(DocumentRepo<>)).As(typeof(IDocumentRepo<>)).InstancePerLifetimeScope();
 
             builder.Register(_ => CloudStorageAccount.Parse(_.Resolve<IConfig>()["StorageConnectionString"]))
                 .AsSelf()
@@ -57,8 +57,6 @@ namespace Xamling.Azure.Glue
             builder.Register(_=>_.Resolve<IRedisConnection>().GetDatabase()).As<IDatabase>();
             builder.Register(_ => _.Resolve<IRedisConnection>().GetSubscriber()).As<ISubscriber>();
 
-            builder.RegisterType<RedisEntityCache>().As<IRedisEntityCache>();
-           
             builder.RegisterType<RedisEntityCache>().As<IRedisEntityCache>();
 
             builder.RegisterType<RedisMemoryCache>().As<IMemoryCache>();

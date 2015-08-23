@@ -18,5 +18,6 @@ namespace Xamling.Azure.Portable.Contract.Cache
         Task<string> GetEntityListRightPop(string key);
         Task<long> GetListLength(string key);
         string GetKey(string key);
+        void SetKeyModifier(Func<string, string> keyModifierCallback);
     }
 }

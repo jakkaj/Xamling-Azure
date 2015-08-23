@@ -36,7 +36,7 @@ namespace Xamling.Azure.Glue
 
             builder.RegisterType<DocumentConnection>().As<IDocumentConnection>().SingleInstance();
 
-            builder.RegisterType<DocumentEntityCache>().As<IDocumentEntityCache>().InstancePerRequest();
+            builder.RegisterType<DocumentEntityCache>().As<IDocumentEntityCache>();
 
             builder.RegisterGeneric(typeof(DocumentRepo<>)).As(typeof(IDocumentRepo<>)).InstancePerRequest();
 
