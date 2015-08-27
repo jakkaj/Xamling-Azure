@@ -19,13 +19,15 @@ namespace Xamling.Azure.DocumentDB
         private Database _database;
         private DocumentCollection _documentCollection;
 
+        public static string SpatialIndexPath { get; set; }
+
         public DocumentConnection(DocumentClient client, IConfig config)
         {
             _client = client;
             _config = config;
         }
 
-       public DocumentClient Client => _client;
+        public DocumentClient Client => _client;
 
         public async Task<Database> GetDatabase()
         {
@@ -61,7 +63,7 @@ namespace Xamling.Azure.DocumentDB
                         .AsEnumerable()
                         .FirstOrDefault();
 
-            if(db == null)
+            if (db == null)
             {
                 db = await _client.CreateDatabaseAsync(new Database
                 {
@@ -85,6 +87,8 @@ namespace Xamling.Azure.DocumentDB
 
         public async Task<DocumentCollection> GetCollection(string collectionId, Database db)
         {
+            var policy = GetIndexingPolicy();
+
             var c = _client.CreateDocumentCollectionQuery(db.CollectionsLink)
                           .Where(_ => _.Id == collectionId)
                           .AsEnumerable()
@@ -93,16 +97,73 @@ namespace Xamling.Azure.DocumentDB
             if (c == null)
             {
                 c = await _client.CreateDocumentCollectionAsync(db.CollectionsLink,
-                   new DocumentCollection()
-                   {
-                       Id = collectionId
-                   });
+                    new DocumentCollection()
+                    {
+                        Id = collectionId
+                    });
+
+                if (policy != null)
+                {
+                    c.IndexingPolicy = policy;
+                }
+            }
+            else if (policy != null)
+            {
+                c.IndexingPolicy = policy;
+                await _client.ReplaceDocumentCollectionAsync(c);
+
+                long indexTransformationProgress = 0;
+
+                while (indexTransformationProgress < 100)
+                {
+                    Console.WriteLine($"waiting for indexing to complete ({indexTransformationProgress})...");
+                    ResourceResponse<DocumentCollection> response = await _client.ReadDocumentCollectionAsync(c.SelfLink);
+                    indexTransformationProgress = response.IndexTransformationProgress;
+
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+
+                }
             }
 
             return c;
 
         }
 
+        private IndexingPolicy GetIndexingPolicy()
+        {
+            if (string.IsNullOrWhiteSpace(SpatialIndexPath))
+            {
+                return null;
+            }
+
+            var pol = new IndexingPolicy
+            {
+                IncludedPaths = new System.Collections.ObjectModel.Collection<IncludedPath>()
+                {
+                    new IncludedPath
+                    {
+                        Path = SpatialIndexPath,
+                        Indexes = new System.Collections.ObjectModel.Collection<Index>()
+                        {
+                            new SpatialIndex(DataType.Point),
+                            new RangeIndex(DataType.Number) {Precision = -1},
+                            new RangeIndex(DataType.String) {Precision = -1}
+                        },
+                    },
+                    new IncludedPath
+                    {
+                        Path = "/*",
+                        Indexes = new System.Collections.ObjectModel.Collection<Index>()
+                        {
+                            new RangeIndex(DataType.Number) {Precision = -1},
+                            new RangeIndex(DataType.String) {Precision = -1}
+                        },
+                    }
+                }
+            };
+
+            return pol;
+        }
 
     }
 }

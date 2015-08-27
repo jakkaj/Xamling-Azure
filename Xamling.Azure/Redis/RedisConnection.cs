@@ -17,15 +17,13 @@ namespace Xamling.Azure.Redis
     public class RedisConnection : IRedisConnection
     {
         private readonly IConfig _config;
-        private readonly ILogService _logService;
         private  ConnectionMultiplexer _connection;
 
         private bool _isRetrying = false;
 
-        public RedisConnection(IConfig config, ILogService logService)
+        public RedisConnection(IConfig config)
         {
             _config = config;
-            _logService = logService;
             _connect();
         }
 
@@ -47,7 +45,7 @@ namespace Xamling.Azure.Redis
                 }
                 else
                 {
-                    _logService.TrackTrace("RedisConnectionFailure", XSeverityLevel.Error);
+                    //_logService.TrackTrace("RedisConnectionFailure", XSeverityLevel.Error);
 
                     if (!_isRetrying)
                     {
@@ -58,8 +56,8 @@ namespace Xamling.Azure.Redis
             }
             catch (Exception Ex)
             {
-                _logService.TrackTrace("RedisConnectionFailure", XSeverityLevel.Error);
-                _logService.TrackException(Ex);
+                //_logService.TrackTrace("RedisConnectionFailure", XSeverityLevel.Error);
+                //_logService.TrackException(Ex);
                 throw Ex;
             }
         }
@@ -85,7 +83,7 @@ namespace Xamling.Azure.Redis
 
         private void _connection_ConnectionFailed(object sender, ConnectionFailedEventArgs e)
         {
-            _logService.TrackTrace("RedisConnectionFailure", XSeverityLevel.Error);
+            //_logService.TrackTrace("RedisConnectionFailure", XSeverityLevel.Error);
             _connection.ConnectionFailed -= _connection_ConnectionFailed;
             _connect();
         }
