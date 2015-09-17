@@ -13,7 +13,7 @@ namespace Xamling.Azure.Logger
 {
     public static class LogExtensions
     {
-        public static XResult<T> Log<T>(this XResult<T> result, string operationName = null)
+        public static XResult<T> Log<T>(this XResult<T> result, ILifetimeScope scope, string operationName = null)
         {
             if (ContainerHost.Container == null)
             {
@@ -21,7 +21,7 @@ namespace Xamling.Azure.Logger
                 return result;
             }
 
-            var logger = ContainerHost.Container.Resolve<ILogService>();
+            var logger = scope.Resolve<ILogService>();
             logger.TrackOperation(result, operationName);
 
             return result;
